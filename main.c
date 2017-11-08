@@ -1,8 +1,8 @@
 #include "test.h"
-#include "stdio.h"
 
 int main() {
 
+    test_0();
     test_1();
 
 }

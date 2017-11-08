@@ -1,6 +1,5 @@
 #include <malloc.h>
 #include <mem.h>
-#include <stdio.h>
 #include "list_functions.h"
 
 
@@ -36,9 +35,9 @@ unsigned int reduce(unsigned int(*f)(void*,void*), void*data, size_t data_bytes,
     return result;
 }
 
-void heapify(int(*f)(void*,void*), void*data, size_t data_bytes, size_t data_length, int root){
-    int max = root;
-    int child = (2*root) + 1;
+void heapify(int(*f)(void*,void*), void*data, size_t data_bytes, size_t data_length, size_t root){
+    size_t max = root;
+    size_t child = (2*root) + 1;
     while(child < data_length) {
         if (child+1 < data_length &&
             f(data + (data_bytes*(child+1)), data + (data_bytes* child))){
@@ -63,7 +62,7 @@ void heapify(int(*f)(void*,void*), void*data, size_t data_bytes, size_t data_len
 
 void sort(int(*f)(void*,void*), void*data, size_t data_bytes, size_t data_length) {
     for (int i = (data_length/2)-1; i >= 0; i--) {
-        heapify(f, data, data_bytes, data_length, i);
+        heapify(f, data, data_bytes, data_length, (size_t) i);
     }
 
     for (size_t i = data_length-1; i >= 1; i--) {

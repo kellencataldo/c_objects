@@ -1,16 +1,18 @@
 **Relevant files:** 
 * / lib / src / list_functions.c
 * / lib / include / list_functions.h
-* / test / test_1.c
+* / test / test_0.c
 
-# Function Pointers
+## Function Pointers
 
 Now, I will assume that you are pretty familiar with 
 pointers. So I will use this as a start point.
  If you know what this next expression does, feel free to 
  skip this section.
 
-> char*(\*f_ptr)(char\*,int) = &func;
+```
+ char*(*f_ptr)(char*,int) = &func;
+```
 
 This is a function pointer and it does exactly what it sounds like, 
 it points to a function. To get more specific, this function pointer 
@@ -18,12 +20,16 @@ points to the location of a function (func) that takes a char pointer
 (char\*) and an int (int) and returns a char pointer (char\*). 
 A more simple example looks like this statement below. 
 
->type (*func_pointer)(type, type)
+```
+type (*func_pointer)(type, type)
+```
 
 The function declaration of the function that this function pointer 
 is pointer to would look like this statement below.
 
->type func(type arg_1, type arg_2 );
+```
+type func(type arg_1, type arg_2 );
+```
 
 Now, the obvious question is: when would you ever need to use a 
 function pointer. Well, one example is that they can be passed to 
@@ -31,7 +37,9 @@ other functions. For example, in python one can apply a function to
 every element in the list using the "map" function. The syntax for 
 this is shown below.
 
->map(function_to_apply, list_of_inputs)
+```
+map(function_to_apply, list_of_inputs)
+```
 
 We can replicate this function in C, since function_to_apply 
 is simply a function pointer (although pointer functionality 
@@ -52,13 +60,13 @@ variety of data types, I would like to keep the implementation
  function to that list of elements. We can do this easily using pointer
  arithmetic. 
  
->void map(void(\*f)(void\*), void * data, size_t data_length){
- >>for(int * i = data; i < data + data_length; i++){
- >>>f(i);
- 
- >>}
- 
- >}
+ ```
+void map(void(*f)(void*), void * data, size_t data_length){
+    for(int * i = data; i < data + data_length; i++){
+        f(i);
+    }
+}
+ ```
  
  There is an obvious issue here, which is the fact that this function will
  not have an idea what type it is working. Therefore will not compile
@@ -74,28 +82,30 @@ variety of data types, I would like to keep the implementation
  shorted possible data size) and then perform pointer arithmetic by
  incrementing by the data size. Here is our final function.
  
- >void * map(void(\*f)(void\*), void * data, size_t data_bytes, size_t data_length) {
- >>    for (char * i = (char*)data; i < (char*)data + (data_length*data_bytes); i += data_bytes) {
- >>> f(i);
- 
- >>}
- 
- >}
+ ```
+void * map(void(*f)(void*), void * data, size_t data_bytes, size_t data_length) {
+    for (char * i = (char*)data; i < (char*)data + (data_length*data_bytes); i += data_bytes) {
+       f(i);
+    }
+}
+ ```
  
  Now we have solved both problems, and our map function will work on any
  data type. To test this, lets define the function that we want to 
  map to the elements.
  
- >void square_func(void*element) {
- >>  \*((int\*)element) = \*((int\*)element) \* \*((int\*)element);
- 
- >}
- 
+ ```
+void square_func(void*element) {
+  *((int*)element) = *((int*)element) * *((int*)element);
+}
+ ```
  There are a couple things to notice here. The first is that this function is 
  receiving a void pointer. This is necessary if you remember the map function
  was passed a function pointer that looked like this 
  
- > void(\*f)(void\*)
+ ```
+void(*f)(void*)
+ ```
  
  so that it may work on any data type. The next thing to notice is that we
  are immediately dereferencing that void pointer. Therefore it is up to 
@@ -107,19 +117,27 @@ variety of data types, I would like to keep the implementation
  To finish things off, the pointer to the function that will be mapped to 
  every element appears like this:
  
- > void(\*square_func_ptr)(void*) = &square_func;
+ ```
+  void(*square_func_ptr)(void*) = &square_func;
+ ```
  
  Our list of elements will look like this:
  
- > int nums[] = { 1,2,3,4,5 };
+ ```
+ int nums[] = { 1,2,3,4,5 };
+ ```
  
  And calling the map function will look like this:
  
- > map(square_func_ptr, nums, 4, 5);
+ ```
+ map(square_func_ptr, nums, sizeof(int), 5);
+ ```
  
- The end result is this:
- 
- >  nums = { 1,4,9,16,25 };
+The end result is this:
+
+``` 
+nums = { 1,4,9,16,25 };
+```
  
  One last thing to mention is that the difference in python between 
  map(func(), list) and map(func, list) is the same difference between calling
@@ -138,4 +156,4 @@ variety of data types, I would like to keep the implementation
  sort a list in descending order but also to sort a string by reverse 
  alphabetical order. Reduce is used to sum up the elements in a list, but 
  also to reduce a string representation of a binary integer to that 
- binary value. 
+ binary value.
