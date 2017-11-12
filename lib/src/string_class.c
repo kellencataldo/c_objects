@@ -64,7 +64,6 @@ void _slice(string_t self, size_t left, size_t right){
 
 void _replace(string_t self, char a, int nargs, ...){
     va_list list;
-    //va_start(list, nargs);
     for(size_t i = 0; i < self->len; i++){
         va_start(list, nargs);
         for(int arg=0; arg < nargs; arg++){

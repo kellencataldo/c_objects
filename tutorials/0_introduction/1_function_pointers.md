@@ -70,16 +70,17 @@ void map(void(*f)(void*), void * data, size_t data_length){
  
  There is an obvious issue here, which is the fact that this function will
  not have an idea what type it is working. Therefore will not compile
- as pointer arithmetic on a void pointer in C without casting it is illegal. 
+ as pointer arithmetic on a void pointer in C, without casting, is illegal. 
  However, like map in python, it would be nice if this function could 
  work with all sorts of data types.
  
  Another more subtle, but related issue, is that incremented by int will
- not work for all types, such as a list of chars.
+ not work for all types, such as a list of chars because every increment of 
+ int i is four characters long.
  
  The solution is to also add the size of the data, in bytes, to the arguments. Therefore,
  we can simply cast the void pointer as a char pointer (since this is the 
- shorted possible data size) and then perform pointer arithmetic by
+ shortest possible data size) and then perform pointer arithmetic by
  incrementing by the data size. Here is our final function.
  
  ```
