@@ -1,7 +1,7 @@
 #include <mem.h>
+#include <assert.h>
 #include <malloc.h>
-#include <stdio.h>
-#include "string_class.h"
+#include "string_test.h"
 
 void * string_constructor(void * _self, va_list * args) {
     struct string * self = _self;

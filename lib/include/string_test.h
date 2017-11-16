@@ -1,14 +1,10 @@
-#ifndef C_OBJECTS_STRING_CLASS_H
-#define C_OBJECTS_STRING_CLASS_H
+#ifndef C_OBJECTS_STRING_TEST_H
+#define C_OBJECTS_STRING_TEST_H
 
-#include <stddef.h>
 #include <stdarg.h>
 
-void * string_constructor (void * _self, va_list * args);
-typedef struct string * string_t;
-
 struct string {
-    const void * base;
+    const void * class; /* must be first */
     char * char_string;
     size_t len;
     void(*extend)(string_t,const char*,size_t);
@@ -28,4 +24,4 @@ int _str_eq(string_t self, string_t other);
 void _replace(string_t self, char a, int nargs, ...);
 void _dest(string_t self);
 
-#endif//C_OBJECTS_STRING_CLASS_H
+#endif //C_OBJECTS_STRING_TEST_H

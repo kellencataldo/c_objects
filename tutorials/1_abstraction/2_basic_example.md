@@ -128,7 +128,7 @@ to point towards to the extend function.
 
 ```
 string_t new_string(char * _string, size_t _size) {
-    string_t self = malloc(sizeof(string_t));
+    string_t self = malloc(sizeof(struct string));
     char *self_string = malloc(_size+1);
     memcpy(self_string, _string, _size);
     self->char_string = self_string;
