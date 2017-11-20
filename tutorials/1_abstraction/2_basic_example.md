@@ -133,7 +133,7 @@ string_t new_string(char * _string, size_t _size) {
     memcpy(self_string, _string, _size);
     self->char_string = self_string;
     self->len = _size;
-    self->extend = &_extend;
+    self->extend = _extend;
     return self;
 }
 

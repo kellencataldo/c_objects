@@ -11,7 +11,7 @@ pointers. So I will use this as a start point.
  skip this section.
 
 ```
- char*(*f_ptr)(char*,int) = &func;
+ char*(*f_ptr)(char*,int) = func;
 ```
 
 This is a function pointer and it does exactly what it sounds like, 
@@ -115,13 +115,6 @@ void(*f)(void*)
  where correct data types must be specified, while the map function
  can remain generic for all types.
  
- To finish things off, the pointer to the function that will be mapped to 
- every element appears like this:
- 
- ```
-  void(*square_func_ptr)(void*) = &square_func;
- ```
- 
  Our list of elements will look like this:
  
  ```
@@ -131,7 +124,7 @@ void(*f)(void*)
  And calling the map function will look like this:
  
  ```
- map(square_func_ptr, nums, sizeof(int), 5);
+ map(square_func, nums, sizeof(int), 5);
  ```
  
 The end result is this:
@@ -158,3 +151,23 @@ nums = { 1,4,9,16,25 };
  alphabetical order. Reduce is used to sum up the elements in a list, but 
  also to reduce a string representation of a binary integer to that 
  binary value.
+ 
+###### A quick note on syntax:
+
+This statement:
+
+```
+ char*(*f_ptr)(char*,int) = func;
+```
+
+Is functionally equivalent to this statement:
+
+```
+ char*(*f_ptr)(char*,int) = &func;
+```
+
+The C standard dictates that the function name "func" is promoted to a function pointer 
+when it is passed as an argument, or on the right side of an assignment. Therefore, in
+most cases, we don't ever need to declare a separate function pointer to pass as an 
+argument to a separate function. However, if you need or want to, it can be done.
+The last test in test_0.c demonstrates this implementation. 
