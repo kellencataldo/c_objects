@@ -34,4 +34,3 @@ implementing some sort of base class which has uniform polymorphic methods that 
 be utilized by all of our classes. For example, what if instead of having a separate 
 constructor for every class, we had one "new" method that could work for all types. 
 This idea is what we will be working on next.
-

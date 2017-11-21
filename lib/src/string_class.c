@@ -3,20 +3,34 @@
 #include <stdio.h>
 #include "string_class.h"
 
-void * string_constructor(void * _self, va_list * args) {
-    struct string * self = _self;
+
+static struct base _string = {
+        string_constructor,
+        string_destructor,
+        sizeof(struct string_struct)
+};
+
+base_class string = &_string;
+
+void * string_constructor(base_class _self, va_list * args) {
+    string_t self = (string_t) _self;
     const char * base_string = va_arg(* args, const char *);
     self->len = va_arg(* args, const size_t);
     self->char_string = malloc(self->len + 1);
     memcpy(self->char_string, base_string, self->len);
-    self->extend = &_extend;
-    self->extendl = &_extendl;
-    self->index = &_index;
-    self->slice = &_slice;
-    self->replace = &_replace;
-    self->str_eq = &_str_eq;
-    self->dest = &_dest;
+    *(self->char_string + self->len) = 0x0;
+    self->extend = _extend;
+    self->extendl = _extendl;
+    self->index = _index;
+    self->slice = _slice;
+    self->replace = _replace;
+    self->str_eq = _str_eq;
     return self;
+}
+
+void string_destructor(void * self){
+    free(((string_t) self)->char_string);
+    free(self);
 }
 
 void _extend(string_t self, const char* _string, size_t _size){
@@ -50,13 +64,15 @@ int _index(string_t self, char a){
 
 void _slice(string_t self, size_t left, size_t right){
     if (left > self->len || left > right){ return;}
-    if (left == 0 && realloc(self->char_string, right) != 0){ return;}
+    if (left == 0 && realloc(self->char_string, right+1) != 0){ return;}
     else{
-        char*new_string = (char*)malloc(right - left);
+        char*new_string = (char*)malloc(1 + right - left);
         if(new_string != NULL) {
             memcpy(new_string, self->char_string + left, right - left);
             free(self->char_string);
             self->char_string = new_string;
+            *(new_string+(right-left)) = 0x0;
+            self->len = right - left;
         }
     }
 }
@@ -83,9 +99,4 @@ int _str_eq(string_t self, string_t other){
         }
     }
     return 1;
-}
-
-void _dest(string_t self){
-    free(self->char_string);
-    free(self);
 }

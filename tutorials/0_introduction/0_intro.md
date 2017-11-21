@@ -25,3 +25,11 @@ and how these can be implemented in C manually. This course will also
 include a library containing many basic data structure objects which 
 have been implemented such as linked lists, strings, binary search trees, 
 heaps, etc.
+
+##### A note on implementation
+
+Many of the implementation files will not reflect the implementation demonstrated in 
+the tutorial files. This is because all library files represent the final product of 
+the tutorials. If you see something that was not covered in the current tutorial file, 
+it will be covered in a later tutorial file.
+

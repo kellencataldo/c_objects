@@ -21,7 +21,7 @@ set(SOURCE_FILES
         lib/include/string_class.h
         test/test_1.c lib/include/class.h
         test/test_2.c
-        lib/src/class.c)
+        lib/src/class.c lib/include/vector_class.h lib/src/vector_class.c)
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 add_executable(c_objects ${SOURCE_FILES})
