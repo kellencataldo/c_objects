@@ -1,10 +1,11 @@
 #include <assert.h>
 #include <mem.h>
+#include <stdio.h>
 #include "string_class.h"
 
 void test_1(){
-    string_t string_1 = new(string, "google", 6);
-    string_t string_2 = new(string, "https://www.google.com", 22);
+    string_t * string_1 = new(string, "google", 6);
+     string_t * string_2 = new(string, "https://www.google.com", 22);
 
     assert(!(  string_1->str_eq( string_1, string_2 )));
 
@@ -13,7 +14,6 @@ void test_1(){
 
     string_1->extendl(string_1, "https://www.", 12);
     assert( strcmp( string_1->char_string, "https://www.google.com\0" ) == 0);
-
     assert(  string_1->str_eq(string_1, string_2   ));
 
     assert(string_1->index(string_1, 'l') == 16);

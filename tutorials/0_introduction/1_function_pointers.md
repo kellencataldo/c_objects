@@ -134,11 +134,8 @@ nums = { 1,4,9,16,25 };
 ```
  
  One last thing to mention is that the difference in python between 
- map(func(), list) and map(func, list) is the same difference between calling
- our function as map(square_func_ptr, ...) and map(square_func, ...). In both
- languages, the first version will invoke the call immediately, and the
- second is a pointer to a function which will be used to map every element
- in the list.
+ map(func(), list) and map(func, list) is the first is function call,
+ and the second is a pointer to that function. 
  
  Along with map, I have also implemented filter, sort, and 
  reduce in the list_functions.c file. In the file /test/test_1.c I 

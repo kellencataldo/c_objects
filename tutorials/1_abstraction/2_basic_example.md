@@ -36,8 +36,8 @@ struct. All we know so far is that our string class should contain some
 letters representing the string.
 
 ```
-typedef struct string string_t;
-struct string{
+typedef struct string_struct string_t;
+struct string_struct{
     char * char_string;
     size_t len;
 };
@@ -52,9 +52,9 @@ the class around those arguments. Therefore, our new_string function should
 take in a string representing the string we want stored in our class.
 
 ```
-string_t new_string(char * _string, size_t _size) {
-    string_t self = malloc(sizeof(string_t));
-    char *self_string = malloc(_size+1);
+string_t * new_string(char * _string, size_t _size) {
+    string_t * self = malloc(sizeof(string_t));
+    char *self_string = (char*)malloc(_size+1);
     memcpy(self_string, _string, _size);
     self->char_string = self_string;
     self->len = _size;
@@ -71,7 +71,7 @@ without worrying about adversely affecting other parts of the program. Now,
 declaring a string looks like this:
 
 ```
-string_t string_1 = new_string("ABCDEFG", 7);
+string_t * string_1 = new_string("ABCDEFG", 7);
 ```
 
 And accessing our string looks like this:
@@ -103,7 +103,7 @@ current object as the language itself does that for you. In Python, the
 method in python. So let's add the object to our function declaration.
 
 ```
-void _extend(string_t self, const char * _string, size_t _size){}
+void _extend(string_t * self, const char * _string, size_t _size){}
 ```
 
 
@@ -111,11 +111,11 @@ Now we get back to function pointers. Let's declare a function pointer to
 this function, and store it in our string_t struct. 
 
 ```
-typedef struct string string_t;
+typedef struct string_struct string_t;
 struct string{
     char * char_string;
     size_t len;
-    void(*extend)(string_t,const char*,size_t);
+    void(*extend)(string_t*,const char*,size_t);
 };
 ```
 
@@ -127,8 +127,8 @@ needs to be modified as well, in order to set the extend function pointer
 to point towards to the extend function.
 
 ```
-string_t new_string(char * _string, size_t _size) {
-    string_t self = malloc(sizeof(struct string));
+string_t * new_string(char * _string, size_t _size) {
+    string_t * self = malloc(sizeof(struct string));
     char *self_string = malloc(_size+1);
     memcpy(self_string, _string, _size);
     self->char_string = self_string;
@@ -142,7 +142,7 @@ string_t new_string(char * _string, size_t _size) {
 Now we can actually go about implementing this function. 
 
 ```
-void _extend(string_t self, const char* _string, size_t _size){
+void _extend(string_t * self, const char* _string, size_t _size){
     if ((self->char_string = realloc(self->char_string, self->len + _size+1)) != 0){
         memcpy(self->char_string + self->len, _string, _size);
         self->len+=_size;

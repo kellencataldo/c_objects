@@ -4,17 +4,17 @@
 #include "string_class.h"
 
 
-static struct base _string = {
+static base_class _string = {
         string_constructor,
         string_destructor,
-        sizeof(struct string_struct)
+        sizeof(string_t)
 };
 
-base_class string = &_string;
+base_class * string = &_string;
 
-void * string_constructor(base_class _self, va_list * args) {
-    string_t self = (string_t) _self;
-    const char * base_string = va_arg(* args, const char *);
+void * string_constructor(base_class * _self, va_list * args) {
+    string_t* self = (string_t*) _self;
+    const char * base_string = va_arg(*args, const char *);
     self->len = va_arg(* args, const size_t);
     self->char_string = malloc(self->len + 1);
     memcpy(self->char_string, base_string, self->len);
@@ -29,11 +29,11 @@ void * string_constructor(base_class _self, va_list * args) {
 }
 
 void string_destructor(void * self){
-    free(((string_t) self)->char_string);
+    free(((string_t*) self)->char_string);
     free(self);
 }
 
-void _extend(string_t self, const char* _string, size_t _size){
+void _extend(string_t* self, const char* _string, size_t _size){
     if ((self->char_string = (char*)realloc(self->char_string, self->len + _size+1)) != 0){
         memcpy(self->char_string + self->len, _string, _size);
         self->len+=_size;
@@ -41,8 +41,8 @@ void _extend(string_t self, const char* _string, size_t _size){
     }
 }
 
-void _extendl(string_t self, const char* _string, size_t _size){
-    char * new_string = (char*)malloc(self->len+_size + 1);
+void _extendl(string_t* self, const char* _string, size_t _size){
+    char * new_string = (char*)calloc(1, self->len+_size + 1);
     if (new_string !=  NULL) {
         memcpy(new_string, _string, _size);
         memcpy(new_string + _size, self->char_string, self->len);
@@ -53,7 +53,7 @@ void _extendl(string_t self, const char* _string, size_t _size){
     }
 }
 
-int _index(string_t self, char a){
+int _index(string_t* self, char a){
     for(size_t i = 0; i < self->len; i++ ){
         if(a == *(self->char_string + i )){
             return (int)i;
@@ -62,11 +62,11 @@ int _index(string_t self, char a){
     return -1;
 }
 
-void _slice(string_t self, size_t left, size_t right){
+void _slice(string_t* self, size_t left, size_t right){
     if (left > self->len || left > right){ return;}
     if (left == 0 && realloc(self->char_string, right+1) != 0){ return;}
     else{
-        char*new_string = (char*)malloc(1 + right - left);
+        char*new_string = malloc((right-left)+1);
         if(new_string != NULL) {
             memcpy(new_string, self->char_string + left, right - left);
             free(self->char_string);
@@ -78,7 +78,7 @@ void _slice(string_t self, size_t left, size_t right){
 }
 
 
-void _replace(string_t self, char a, int nargs, ...){
+void _replace(string_t* self, char a, int nargs, ...){
     va_list list;
     for(size_t i = 0; i < self->len; i++){
         va_start(list, nargs);
@@ -91,7 +91,7 @@ void _replace(string_t self, char a, int nargs, ...){
     }
 }
 
-int _str_eq(string_t self, string_t other){
+int _str_eq(string_t* self, string_t* other){
     if( self->len != other->len){ return 0;}
     else{
         for(size_t i = 0; i < self->len; i++){
